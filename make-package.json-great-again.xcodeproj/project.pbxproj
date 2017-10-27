@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D77131721FA33F7D003485E8 /* TouchBarIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77131711FA33F7D003485E8 /* TouchBarIdentifiers.swift */; };
 		D7BD16B81F963855003E01AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BD16B71F963855003E01AD /* AppDelegate.swift */; };
 		D7BD16BA1F963855003E01AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BD16B91F963855003E01AD /* ViewController.swift */; };
 		D7BD16BC1F963855003E01AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7BD16BB1F963855003E01AD /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D77131711FA33F7D003485E8 /* TouchBarIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchBarIdentifiers.swift; sourceTree = "<group>"; };
 		D7BD16B41F963855003E01AD /* make-package.json-great-again.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "make-package.json-great-again.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7BD16B71F963855003E01AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7BD16B91F963855003E01AD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 		D7BD16B61F963855003E01AD /* make-package.json-great-again */ = {
 			isa = PBXGroup;
 			children = (
+				D77131711FA33F7D003485E8 /* TouchBarIdentifiers.swift */,
 				D7BD16B71F963855003E01AD /* AppDelegate.swift */,
 				D7BD16B91F963855003E01AD /* ViewController.swift */,
 				D7BD16BB1F963855003E01AD /* Assets.xcassets */,
@@ -135,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7BD16BA1F963855003E01AD /* ViewController.swift in Sources */,
+				D77131721FA33F7D003485E8 /* TouchBarIdentifiers.swift in Sources */,
 				D7BD16B81F963855003E01AD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
