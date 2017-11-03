@@ -1,4 +1,3 @@
-//
 //  ViewController.swift
 //  make-package.json-great-again
 //
@@ -10,7 +9,8 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-
+    var packageJsonLocations = [URL]() // Stores list of package.json projects
+    
     override func viewDidAppear() {
         super.viewDidAppear()
         self.view.window?.unbind(NSBindingName(rawValue: #keyPath(touchBar))) // unbind first
@@ -19,6 +19,44 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        findPackageJsonInDir(dirPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
+    }
+    
+
+    
+    
+    /**
+     * Function to recursivley search for valid package.json files
+     * within a given directory (but ignoring node_modules !)
+     */
+    func findPackageJsonInDir(dirPath: URL){
+
+        do {
+            // Get URL of directory (from dirPath param)
+            let directoryContents =
+                try FileManager.default.contentsOfDirectory(at: dirPath as! URL, includingPropertiesForKeys: nil, options: [])
+            
+            // For every file/ directory in current directory
+            for dir in directoryContents{
+                let fileManager = FileManager.default
+                var isDir : ObjCBool = false
+                if fileManager.fileExists(atPath: dir.path, isDirectory:&isDir) {
+                    if isDir.boolValue {
+                        if dir.absoluteString.range(of: "node_modules") == nil {
+                            // If this is also a directory, recursivley search it too
+                            findPackageJsonInDir(dirPath: dir)
+                        }
+                    } else {
+                        // If it's a file, check if it is the target package.json
+                        if dir.absoluteString.hasSuffix("package.json") {
+                            self.packageJsonLocations.append(dir)
+                        }
+                    }
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     override var representedObject: Any? {
