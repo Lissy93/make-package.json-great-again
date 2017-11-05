@@ -50,6 +50,8 @@ class ViewController: NSViewController {
                         // If it's a file, check if it is the target package.json
                         if dir.absoluteString.hasSuffix("package.json") {
                             self.packageJsonLocations.append(dir)
+                            readPackageJson(jsonPath: dir)
+
                         }
                     }
                 }
@@ -57,6 +59,17 @@ class ViewController: NSViewController {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func readPackageJson(jsonPath: URL){
+        let task = URLSession.shared.dataTask(with: jsonPath) {(data, response, error) in
+            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue) as Any)
+        }
+        task.resume()
+    }
+    
+    func parsePackageJson(){
+        
     }
 
     override var representedObject: Any? {
