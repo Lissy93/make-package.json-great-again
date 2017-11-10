@@ -11,6 +11,8 @@ class ViewController: NSViewController {
     
     var packageJsonLocations = [URL]() // Stores list of package.json projects
     
+    var name: String = ""
+    
     override func viewDidAppear() {
         super.viewDidAppear()
         self.view.window?.unbind(NSBindingName(rawValue: #keyPath(touchBar))) // unbind first
@@ -34,7 +36,7 @@ class ViewController: NSViewController {
         do {
             // Get URL of directory (from dirPath param)
             let directoryContents =
-                try FileManager.default.contentsOfDirectory(at: dirPath as! URL, includingPropertiesForKeys: nil, options: [])
+                try FileManager.default.contentsOfDirectory(at: dirPath , includingPropertiesForKeys: nil, options: [])
             
             // For every file/ directory in current directory
             for dir in directoryContents{
@@ -51,7 +53,6 @@ class ViewController: NSViewController {
                         if dir.absoluteString.hasSuffix("package.json") {
                             self.packageJsonLocations.append(dir)
                             readPackageJson(jsonPath: dir)
-
                         }
                     }
                 }
@@ -61,9 +62,28 @@ class ViewController: NSViewController {
         }
     }
     
+    /**
+    * Reads and parses a package.json at a given path
+    * Gets the name and list of build scripts for each
+    */
     func readPackageJson(jsonPath: URL){
         let task = URLSession.shared.dataTask(with: jsonPath) {(data, response, error) in
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue) as Any)
+            guard let data = data, error == nil else { return }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:Any]
+                let packageName = json["name"] as? String
+//                let packageScripts = json["scripts"] as? Data
+                if let packageName = packageName {
+                    print(packageName)
+                    self.touchBar = nil
+                    self.name = self.name + " - " + packageName
+                } else {
+                    print("Unable to retrieve package name.")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+//            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) as Any)
         }
         task.resume()
     }
@@ -83,8 +103,23 @@ class ViewController: NSViewController {
         switch identifier {
         case NSTouchBarItem.Identifier.infoLabelItem:
             let customViewItem = NSCustomTouchBarItem(identifier: identifier)
-            customViewItem.view = NSTextField(labelWithString: " Hello World  \u{1F30E}")
+            customViewItem.view = NSButton()
+            customViewItem.view = NSTextField(labelWithString: " Hello World  \u{1F30E}"+" Hello "+self.name)
             return customViewItem
+        case NSTouchBarItem.Identifier.packageListScrubber:
+            // 2
+            let scrubberItem = NSCustomTouchBarItem(identifier: identifier)
+            let scrubber = NSScrubber()
+            scrubber.scrubberLayout = NSScrubberFlowLayout()
+            scrubber.register(NSScrubberTextItemView.self, forItemIdentifier: NSUserInterfaceItemIdentifier(rawValue: "packageListScrubberItemIdentifier"))
+            scrubber.mode = .fixed
+            scrubber.selectionBackgroundStyle = .roundedBackground
+            scrubber.delegate = self as? NSScrubberDelegate
+            scrubber.dataSource = self as? NSScrubberDataSource
+            scrubberItem.view = scrubber
+//            scrubber.bind(NSBindingName(rawValue: "selectedIndex"), to: self, withKeyPath: , options: nil)
+            return scrubberItem
+
         default:
             return nil
         }
@@ -97,17 +132,11 @@ class ViewController: NSViewController {
 extension ViewController: NSTouchBarDelegate {
     
     override func makeTouchBar() -> NSTouchBar? {
-
-        // 1
         let touchBar = NSTouchBar()
         touchBar.delegate = self
-        // 2
         touchBar.customizationIdentifier = .travelBar
-        // 3
         touchBar.defaultItemIdentifiers = [.infoLabelItem]
-        // 4
         touchBar.customizationAllowedItemIdentifiers = [.infoLabelItem]
-        
         return touchBar
     }
 }
