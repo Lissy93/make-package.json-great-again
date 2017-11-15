@@ -11,7 +11,7 @@ class ViewController: NSViewController {
     
     var packageJsonLocations = [URL]() // Stores list of package.json projects
     
-    var name: String = ""
+    var packageJsonList: [PackageJson] = []
     
     override func viewDidAppear() {
         super.viewDidAppear()
@@ -58,7 +58,7 @@ class ViewController: NSViewController {
                 }
             }
         } catch {
-            print(error.localizedDescription)
+            print(error.localizedDescription) // Hmm, looks like everything gone wrong, already
         }
     }
     
@@ -74,14 +74,13 @@ class ViewController: NSViewController {
                 let packageName = json["name"] as? String
 //                let packageScripts = json["scripts"] as? Data
                 if let packageName = packageName {
-                    print(packageName)
                     self.touchBar = nil
-                    self.name = self.name + " - " + packageName
+                    self.packageJsonList.append(PackageJson(packageName: packageName, packageVersion: "12", packageScripts: "jk"))
                 } else {
                     print("Unable to retrieve package name.")
                 }
             } catch let error as NSError {
-                print(error)
+                print(error) // fucking swift
             }
 //            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) as Any)
         }
@@ -99,26 +98,31 @@ class ViewController: NSViewController {
     }
 
     
+    @objc func save(_ sender: AnyObject) -> Void {
+        print("hello")
+    }
+    
     func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         switch identifier {
-        case NSTouchBarItem.Identifier.infoLabelItem:
-            let customViewItem = NSCustomTouchBarItem(identifier: identifier)
-            customViewItem.view = NSButton()
-            customViewItem.view = NSTextField(labelWithString: " Hello World  \u{1F30E}"+" Hello "+self.name)
-            return customViewItem
-        case NSTouchBarItem.Identifier.packageListScrubber:
-            // 2
-            let scrubberItem = NSCustomTouchBarItem(identifier: identifier)
-            let scrubber = NSScrubber()
-            scrubber.scrubberLayout = NSScrubberFlowLayout()
-            scrubber.register(NSScrubberTextItemView.self, forItemIdentifier: NSUserInterfaceItemIdentifier(rawValue: "packageListScrubberItemIdentifier"))
-            scrubber.mode = .fixed
-            scrubber.selectionBackgroundStyle = .roundedBackground
-            scrubber.delegate = self as? NSScrubberDelegate
-            scrubber.dataSource = self as? NSScrubberDataSource
-            scrubberItem.view = scrubber
-//            scrubber.bind(NSBindingName(rawValue: "selectedIndex"), to: self, withKeyPath: , options: nil)
-            return scrubberItem
+        case NSTouchBarItem.Identifier.packageList:
+            let customActionItem = NSCustomTouchBarItem(identifier: identifier)
+            let segmentedControl = NSSegmentedControl(
+                labels: packageJsonList.map({ $0.packageName }),
+                trackingMode: .momentary,
+                target: self,
+                action: #selector(save(_:))
+            )
+            customActionItem.view = segmentedControl
+            return customActionItem
+            
+        case NSTouchBarItem.Identifier.scriptList:
+            let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
+            for package in self.packageJsonList{
+                let button = NSButton(title: package.packageName, target: self, action: #selector(save(_:)))
+                button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
+                touchBarAvailiblePackages.view = button
+            }
+            return touchBarAvailiblePackages
 
         default:
             return nil
@@ -135,8 +139,8 @@ extension ViewController: NSTouchBarDelegate {
         let touchBar = NSTouchBar()
         touchBar.delegate = self
         touchBar.customizationIdentifier = .travelBar
-        touchBar.defaultItemIdentifiers = [.infoLabelItem]
-        touchBar.customizationAllowedItemIdentifiers = [.infoLabelItem]
+        touchBar.defaultItemIdentifiers = [.scriptList, .packageList]
+        touchBar.customizationAllowedItemIdentifiers = [.packageLabelItem]
         return touchBar
     }
 }
