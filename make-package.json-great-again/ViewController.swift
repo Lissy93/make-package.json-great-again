@@ -9,6 +9,8 @@ import Cocoa
 
 class ViewController: NSViewController {
     
+    @IBOutlet weak var touchGroup: NSTouchBarItem!
+    
     var packageJsonLocations = [URL]() // Stores list of package.json projects
     
     var packageJsonList: [PackageJson] = []
@@ -17,6 +19,8 @@ class ViewController: NSViewController {
         super.viewDidAppear()
         self.view.window?.unbind(NSBindingName(rawValue: #keyPath(touchBar))) // unbind first
         self.view.window?.bind(NSBindingName(rawValue: #keyPath(touchBar)), to: self, withKeyPath: #keyPath(touchBar), options: nil)
+
+        
     }
     
     override func viewDidLoad() {
@@ -117,11 +121,9 @@ class ViewController: NSViewController {
             
         case NSTouchBarItem.Identifier.scriptList:
             let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
-            for package in self.packageJsonList{
-                let button = NSButton(title: package.packageName, target: self, action: #selector(save(_:)))
+                let button = NSButton(title: "Hello World", target: self, action: #selector(save(_:)))
                 button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
                 touchBarAvailiblePackages.view = button
-            }
             return touchBarAvailiblePackages
 
         default:
