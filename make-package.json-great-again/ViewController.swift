@@ -8,12 +8,12 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    
-    @IBOutlet weak var touchGroup: NSTouchBarItem!
-    
+        
     var packageJsonLocations = [URL]() // Stores list of package.json projects
     
     var packageJsonList: [PackageJson] = []
+    
+    @objc var rating = 0
     
     override func viewDidAppear() {
         super.viewDidAppear()
@@ -108,6 +108,14 @@ class ViewController: NSViewController {
     
     func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         switch identifier {
+        
+        case NSTouchBarItem.Identifier.leftSideWelcome:
+            let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
+                let button = NSButton(title: "Hello World", target: self, action: #selector(save(_:)))
+                button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
+                touchBarAvailiblePackages.view = button
+            return touchBarAvailiblePackages
+        
         case NSTouchBarItem.Identifier.packageList:
             let customActionItem = NSCustomTouchBarItem(identifier: identifier)
             let segmentedControl = NSSegmentedControl(
@@ -119,12 +127,20 @@ class ViewController: NSViewController {
             customActionItem.view = segmentedControl
             return customActionItem
             
-        case NSTouchBarItem.Identifier.scriptList:
-            let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
-                let button = NSButton(title: "Hello World", target: self, action: #selector(save(_:)))
-                button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
-                touchBarAvailiblePackages.view = button
-            return touchBarAvailiblePackages
+            
+        case NSTouchBarItem.Identifier.packageListScrubber:
+            // TODO figure out how to set the size of each item, before this scrubber is any use
+            let scrubberItem = NSCustomTouchBarItem(identifier: identifier)
+            let scrubber = NSScrubber()
+            scrubber.scrubberLayout = NSScrubberProportionalLayout()
+            scrubber.register(NSScrubberTextItemView.self, forItemIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"))
+            scrubber.mode = .free
+            scrubber.selectionBackgroundStyle = .roundedBackground
+            scrubber.delegate = self
+            scrubber.dataSource = self
+            scrubberItem.view = scrubber
+            scrubber.bind(NSBindingName(rawValue: "selectedIndex"), to: self, withKeyPath: #keyPath(rating), options: nil)
+            return scrubberItem
 
         default:
             return nil
@@ -141,11 +157,39 @@ extension ViewController: NSTouchBarDelegate {
         let touchBar = NSTouchBar()
         touchBar.delegate = self
         touchBar.customizationIdentifier = .travelBar
-        touchBar.defaultItemIdentifiers = [.scriptList, .packageList]
+        touchBar.defaultItemIdentifiers = [.leftSideWelcome, .packageListScrubber]
         touchBar.customizationAllowedItemIdentifiers = [.packageLabelItem]
         return touchBar
     }
 }
+
+
+
+// MARK: - Scrubber DataSource & Delegate
+
+@available(OSX 10.12.1, *)
+extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
+    
+    func numberOfItems(for scrubber: NSScrubber) -> Int {
+        return self.packageJsonList.count
+    }
+    
+    func scrubber(_ scrubber: NSScrubber, viewForItemAt index: Int) -> NSScrubberItemView {
+        let itemView = scrubber.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"), owner: nil) as! NSScrubberTextItemView
+        itemView.textField.stringValue = packageJsonList[index].packageName
+        print(itemView.textField.fittingSize)
+        return itemView
+    }
+    
+    func scrubber(_ scrubber: NSScrubber, didSelectItemAt index: Int) {
+        print("\(#function) at index \(index)")
+        willChangeValue(forKey: "rating")
+        rating = index
+        didChangeValue(forKey: "rating")
+    }
+    
+}
+
 
 
 

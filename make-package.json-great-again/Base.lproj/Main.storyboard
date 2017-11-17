@@ -702,6 +702,7 @@
                                 <viewController key="viewController" id="UKx-hl-kSx">
                                     <textField key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jAJ-cr-YyL">
                                         <rect key="frame" x="0.0" y="0.0" width="46" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" borderStyle="bezel" alignment="left" title="Label" drawsBackground="YES" id="faq-ER-wC3">
                                             <font key="font" usesAppearanceFont="YES"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -715,6 +716,7 @@
                                 <viewController key="viewController" id="FKn-kU-44I">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="YxD-cN-yQT">
                                         <rect key="frame" x="0.0" y="0.0" width="631" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     </view>
                                 </viewController>
                             </touchBarItem>
@@ -736,32 +738,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
-                    <touchBar key="touchBar" id="NmG-ez-bDs">
-                        <touchBarItems>
-                            <touchBarItem id="4RB-fh-kBe">
-                                <viewController key="viewController" id="j1G-J4-97p" customClass="ViewController" customModule="make_package_json_great_again" customModuleProvider="target">
-                                    <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rsS-gB-VVb">
-                                        <rect key="frame" x="0.0" y="0.0" width="72" height="30"/>
-                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Fxa-SP-Yhl">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" usesAppearanceFont="YES"/>
-                                        </buttonCell>
-                                    </button>
-                                </viewController>
-                                <size key="designTimeSize" width="72" height="30"/>
-                            </touchBarItem>
-                            <touchBarItem id="iCb-Zu-nPU">
-                                <viewController key="viewController" id="TNX-Ji-x10">
-                                    <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="bi6-22-Ggl">
-                                        <rect key="frame" x="0.0" y="0.0" width="605" height="30"/>
-                                    </view>
-                                </viewController>
-                            </touchBarItem>
-                        </touchBarItems>
-                    </touchBar>
-                    <connections>
-                        <outlet property="touchGroup" destination="iCb-Zu-nPU" id="t1V-zQ-luq"/>
-                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
