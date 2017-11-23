@@ -11,8 +11,8 @@ extension NSTouchBarItem.Identifier {
   static let packageList = NSTouchBarItem.Identifier("com.aliciasykes.PackageList")
   static let scriptList = NSTouchBarItem.Identifier("com.aliciasykes.ScriptList")
   static let packageListScrubber = NSTouchBarItem.Identifier("com.aliciasykes.PackageListScrubber")
-  static let leftSideWelcome = NSTouchBarItem.Identifier("com.aliciasykes.LeftSideWelcome")
-
+  static let leftSideLabel = NSTouchBarItem.Identifier("com.aliciasykes.LeftSideLabel")
+  static let leftSideNav = NSTouchBarItem.Identifier("com.aliciasykes.LeftSideNav")
     
 }
 

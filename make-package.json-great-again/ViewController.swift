@@ -13,14 +13,14 @@ class ViewController: NSViewController {
     
     var packageJsonList: [PackageJson] = []
     
+    var selectedPackage: PackageJson? = nil
+    
     @objc var rating = 0
     
     override func viewDidAppear() {
         super.viewDidAppear()
         self.view.window?.unbind(NSBindingName(rawValue: #keyPath(touchBar))) // unbind first
         self.view.window?.bind(NSBindingName(rawValue: #keyPath(touchBar)), to: self, withKeyPath: #keyPath(touchBar), options: nil)
-
-        
     }
     
     override func viewDidLoad() {
@@ -76,10 +76,11 @@ class ViewController: NSViewController {
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:Any]
                 let packageName = json["name"] as? String
-//                let packageScripts = json["scripts"] as? Data
+                let packageScripts = json["scripts"] as? [String: Any]
+
                 if let packageName = packageName {
                     self.touchBar = nil
-                    self.packageJsonList.append(PackageJson(packageName: packageName, packageVersion: "12", packageScripts: "jk"))
+                    self.packageJsonList.append(PackageJson(packageName: packageName, packageVersion: "12", packageScripts: packageScripts!))
                 } else {
                     print("Unable to retrieve package name.")
                 }
@@ -90,10 +91,7 @@ class ViewController: NSViewController {
         }
         task.resume()
     }
-    
-    func parsePackageJson(){
-        
-    }
+
 
     override var representedObject: Any? {
         didSet {
@@ -105,17 +103,38 @@ class ViewController: NSViewController {
     @objc func save(_ sender: AnyObject) -> Void {
         print("hello")
     }
+
+    @objc func backToHomeView(_ sender: AnyObject) -> Void {
+        self.selectedPackage = nil
+        self.touchBar = nil
+    }
     
     func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         switch identifier {
-        
-        case NSTouchBarItem.Identifier.leftSideWelcome:
+
+            
+        case NSTouchBarItem.Identifier.leftSideNav:
             let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
-                let button = NSButton(title: "Hello World", target: self, action: #selector(save(_:)))
+            if let selectedPackage = self.selectedPackage {
+                let button = NSButton(title: "<-- Back", target: self, action: #selector(backToHomeView(_:)))
                 button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
                 touchBarAvailiblePackages.view = button
-            return touchBarAvailiblePackages
-        
+                return touchBarAvailiblePackages
+            }
+            return nil
+            
+            
+        case NSTouchBarItem.Identifier.leftSideLabel:
+            let customViewItem = NSCustomTouchBarItem(identifier: identifier)
+            
+            if let selectedPackage = self.selectedPackage {
+                customViewItem.view = NSTextField(labelWithString: selectedPackage.packageName)
+            }
+            else{
+                customViewItem.view = NSTextField(labelWithString: "\u{1F30E} \u{1F4D3}")
+            }
+            return customViewItem
+
         case NSTouchBarItem.Identifier.packageList:
             let customActionItem = NSCustomTouchBarItem(identifier: identifier)
             let segmentedControl = NSSegmentedControl(
@@ -129,7 +148,6 @@ class ViewController: NSViewController {
             
             
         case NSTouchBarItem.Identifier.packageListScrubber:
-            // TODO figure out how to set the size of each item, before this scrubber is any use
             let scrubberItem = NSCustomTouchBarItem(identifier: identifier)
             let scrubber = NSScrubber()
             scrubber.scrubberLayout = NSScrubberProportionalLayout()
@@ -157,7 +175,7 @@ extension ViewController: NSTouchBarDelegate {
         let touchBar = NSTouchBar()
         touchBar.delegate = self
         touchBar.customizationIdentifier = .travelBar
-        touchBar.defaultItemIdentifiers = [.leftSideWelcome, .packageListScrubber]
+        touchBar.defaultItemIdentifiers = [.leftSideNav, .leftSideLabel, .packageListScrubber]
         touchBar.customizationAllowedItemIdentifiers = [.packageLabelItem]
         return touchBar
     }
@@ -177,16 +195,22 @@ extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
     func scrubber(_ scrubber: NSScrubber, viewForItemAt index: Int) -> NSScrubberItemView {
         let itemView = scrubber.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"), owner: nil) as! NSScrubberTextItemView
         itemView.textField.stringValue = packageJsonList[index].packageName
-        print(itemView.textField.fittingSize)
+//        print(itemView.textField.fittingSize)
         return itemView
     }
     
     func scrubber(_ scrubber: NSScrubber, didSelectItemAt index: Int) {
+        self.touchBar = nil
+        self.selectedPackage = self.packageJsonList[index]
         print("\(#function) at index \(index)")
+        print(self.packageJsonList[index].packageScripts.count)
         willChangeValue(forKey: "rating")
         rating = index
         didChangeValue(forKey: "rating")
     }
+    
+    
+    
     
 }
 

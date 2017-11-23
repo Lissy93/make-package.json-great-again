@@ -11,7 +11,7 @@ import Foundation
 struct PackageJson {
     var packageName: String
     var packageVersion: String
-    var packageScripts: String
+    var packageScripts: [String: Any]
 
 
 }
