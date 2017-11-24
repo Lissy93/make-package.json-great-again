@@ -28,6 +28,12 @@ class ViewController: NSViewController {
         findPackageJsonInDir(dirPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!)
     }
     
+    /**
+     * Determines if we are in start view, or package view
+     */
+    func isSelectedPackage() -> Bool {
+        return (self.selectedPackage != nil) ? true : false
+    }
 
     
     
@@ -115,8 +121,8 @@ class ViewController: NSViewController {
             
         case NSTouchBarItem.Identifier.leftSideNav:
             let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
-            if let selectedPackage = self.selectedPackage {
-                let button = NSButton(title: "<-- Back", target: self, action: #selector(backToHomeView(_:)))
+            if self.selectedPackage != nil {
+                let button = NSButton(title: "🔙", target: self, action: #selector(backToHomeView(_:)))
                 button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
                 touchBarAvailiblePackages.view = button
                 return touchBarAvailiblePackages
@@ -131,7 +137,7 @@ class ViewController: NSViewController {
                 customViewItem.view = NSTextField(labelWithString: selectedPackage.packageName)
             }
             else{
-                customViewItem.view = NSTextField(labelWithString: "\u{1F30E} \u{1F4D3}")
+                customViewItem.view = NSTextField(labelWithString: "Select a Project: ")
             }
             return customViewItem
 
@@ -194,8 +200,13 @@ extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
     
     func scrubber(_ scrubber: NSScrubber, viewForItemAt index: Int) -> NSScrubberItemView {
         let itemView = scrubber.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"), owner: nil) as! NSScrubberTextItemView
-        itemView.textField.stringValue = packageJsonList[index].packageName
-//        print(itemView.textField.fittingSize)
+        if self.selectedPackage != nil{ // there IS a selected package.json- so show scripts
+            itemView.textField.stringValue = " everything is stupid"
+        }
+        else { // there ISN'T a selected package.json- so show package list
+            itemView.textField.stringValue = packageJsonList[index].packageName
+            
+        }
         return itemView
     }
     
