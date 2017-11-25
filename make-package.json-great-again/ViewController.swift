@@ -93,7 +93,6 @@ class ViewController: NSViewController {
             } catch let error as NSError {
                 print(error) // fucking swift
             }
-//            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) as Any)
         }
         task.resume()
     }
@@ -137,7 +136,7 @@ class ViewController: NSViewController {
                 customViewItem.view = NSTextField(labelWithString: selectedPackage.packageName)
             }
             else{
-                customViewItem.view = NSTextField(labelWithString: "Select a Project: ")
+                customViewItem.view = NSTextField(labelWithString: "🤠 Select a Project: ")
             }
             return customViewItem
 
@@ -195,26 +194,33 @@ extension ViewController: NSTouchBarDelegate {
 extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
     
     func numberOfItems(for scrubber: NSScrubber) -> Int {
-        return self.packageJsonList.count
+        if self.isSelectedPackage(){
+            return (self.selectedPackage?.packageScripts.count)!
+        }
+        else{
+            return self.packageJsonList.count
+        }
     }
     
     func scrubber(_ scrubber: NSScrubber, viewForItemAt index: Int) -> NSScrubberItemView {
         let itemView = scrubber.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"), owner: nil) as! NSScrubberTextItemView
         if self.selectedPackage != nil{ // there IS a selected package.json- so show scripts
-            itemView.textField.stringValue = " everything is stupid"
+            itemView.textField.stringValue =  (self.selectedPackage?.makePackageScriptList()[index].scriptName)!
         }
         else { // there ISN'T a selected package.json- so show package list
             itemView.textField.stringValue = packageJsonList[index].packageName
-            
         }
         return itemView
     }
     
     func scrubber(_ scrubber: NSScrubber, didSelectItemAt index: Int) {
         self.touchBar = nil
-        self.selectedPackage = self.packageJsonList[index]
-        print("\(#function) at index \(index)")
-        print(self.packageJsonList[index].packageScripts.count)
+        if self.isSelectedPackage(){
+            print((self.selectedPackage?.makePackageScriptList()[index].scriptCommand)!)
+        }
+        else{
+            self.selectedPackage = self.packageJsonList[index]
+        }
         willChangeValue(forKey: "rating")
         rating = index
         didChangeValue(forKey: "rating")
