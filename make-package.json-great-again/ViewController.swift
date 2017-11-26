@@ -122,7 +122,7 @@ class ViewController: NSViewController {
             let touchBarAvailiblePackages = NSCustomTouchBarItem(identifier: identifier)
             if self.selectedPackage != nil {
                 let button = NSButton(title: "🔙", target: self, action: #selector(backToHomeView(_:)))
-                button.bezelColor = NSColor(red:0.35, green:0.61, blue:0.35, alpha:1.00)
+                button.bezelColor = NSColor(red:0.8, green:0.8, blue:0.8, alpha:1.00)
                 touchBarAvailiblePackages.view = button
                 return touchBarAvailiblePackages
             }
@@ -154,11 +154,13 @@ class ViewController: NSViewController {
             
         case NSTouchBarItem.Identifier.packageListScrubber:
             let scrubberItem = NSCustomTouchBarItem(identifier: identifier)
+//            scrubberItem
             let scrubber = NSScrubber()
             scrubber.scrubberLayout = NSScrubberProportionalLayout()
             scrubber.register(NSScrubberTextItemView.self, forItemIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"))
             scrubber.mode = .free
             scrubber.selectionBackgroundStyle = .roundedBackground
+            scrubber.backgroundColor = NSColor(red:1, green:0.2, blue:0.5, alpha:1.00)
             scrubber.delegate = self
             scrubber.dataSource = self
             scrubberItem.view = scrubber
