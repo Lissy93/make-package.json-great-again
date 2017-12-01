@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D71268B01FCD71A600579C19 /* ShellTaskRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71268AF1FCD71A600579C19 /* ShellTaskRunner.swift */; };
 		D73B4C041FBC371200C7364E /* PackageJsonStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73B4C031FBC371200C7364E /* PackageJsonStruct.swift */; };
 		D763C7931FCACD4A001A6BD0 /* TouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763C7921FCACD4A001A6BD0 /* TouchBar.swift */; };
 		D77131721FA33F7D003485E8 /* TouchBarIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77131711FA33F7D003485E8 /* TouchBarIdentifiers.swift */; };
+		D79A478B1FD19C080016DF60 /* PackageJsonOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79A478A1FD19C080016DF60 /* PackageJsonOperations.swift */; };
+		D79A478D1FD1A5F30016DF60 /* Scrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79A478C1FD1A5F30016DF60 /* Scrubber.swift */; };
 		D7BD16B81F963855003E01AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BD16B71F963855003E01AD /* AppDelegate.swift */; };
 		D7BD16BA1F963855003E01AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BD16B91F963855003E01AD /* ViewController.swift */; };
 		D7BD16BC1F963855003E01AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7BD16BB1F963855003E01AD /* Assets.xcassets */; };
@@ -17,9 +20,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D71268AF1FCD71A600579C19 /* ShellTaskRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellTaskRunner.swift; sourceTree = "<group>"; };
 		D73B4C031FBC371200C7364E /* PackageJsonStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageJsonStruct.swift; sourceTree = "<group>"; };
 		D763C7921FCACD4A001A6BD0 /* TouchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBar.swift; sourceTree = "<group>"; };
 		D77131711FA33F7D003485E8 /* TouchBarIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchBarIdentifiers.swift; sourceTree = "<group>"; };
+		D79A478A1FD19C080016DF60 /* PackageJsonOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageJsonOperations.swift; sourceTree = "<group>"; };
+		D79A478C1FD1A5F30016DF60 /* Scrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrubber.swift; sourceTree = "<group>"; };
 		D7BD16B41F963855003E01AD /* make-package.json-great-again.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "make-package.json-great-again.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7BD16B71F963855003E01AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7BD16B91F963855003E01AD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +74,9 @@
 				D7BD16C11F963855003E01AD /* make_package_json_great_again.entitlements */,
 				D73B4C031FBC371200C7364E /* PackageJsonStruct.swift */,
 				D763C7921FCACD4A001A6BD0 /* TouchBar.swift */,
+				D71268AF1FCD71A600579C19 /* ShellTaskRunner.swift */,
+				D79A478A1FD19C080016DF60 /* PackageJsonOperations.swift */,
+				D79A478C1FD1A5F30016DF60 /* Scrubber.swift */,
 			);
 			path = "make-package.json-great-again";
 			sourceTree = "<group>";
@@ -143,11 +152,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D79A478B1FD19C080016DF60 /* PackageJsonOperations.swift in Sources */,
+				D79A478D1FD1A5F30016DF60 /* Scrubber.swift in Sources */,
 				D763C7931FCACD4A001A6BD0 /* TouchBar.swift in Sources */,
 				D7BD16BA1F963855003E01AD /* ViewController.swift in Sources */,
 				D73B4C041FBC371200C7364E /* PackageJsonStruct.swift in Sources */,
 				D77131721FA33F7D003485E8 /* TouchBarIdentifiers.swift in Sources */,
 				D7BD16B81F963855003E01AD /* AppDelegate.swift in Sources */,
+				D71268B01FCD71A600579C19 /* ShellTaskRunner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
