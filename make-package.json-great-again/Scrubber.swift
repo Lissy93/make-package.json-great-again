@@ -26,11 +26,14 @@ extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
     
     func scrubber(_ scrubber: NSScrubber, viewForItemAt index: Int) -> NSScrubberItemView {
         let itemView = scrubber.makeItem(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "RatingScrubberItemIdentifier"), owner: nil) as! NSScrubberTextItemView
+        scrubber.selectedIndex = 0
         if pjo.getSelectedPackage() != nil{ // there IS a selected package.json- so show scripts
             itemView.textField.stringValue =  (pjo.getSelectedPackage()?.makePackageScriptList()[index].scriptName)!
         }
         else { // there ISN'T a selected package.json- so show package list
-            itemView.textField.stringValue = pjo.getPackageJsonList()[index].packageName
+            if(index < pjo.getPackageJsonList().count){ // Double check valid index
+                itemView.textField.stringValue = pjo.getPackageJsonList()[index].packageName
+            }
         }
         return itemView
     }
