@@ -42,8 +42,8 @@ extension ViewController: NSScrubberDataSource, NSScrubberDelegate {
         self.touchBar = nil
         if pjo.isSelectedPackage(){
             print((pjo.getSelectedPackage()!.makePackageScriptList()[index].scriptCommand))
-            shell("ls")
-            shell("xcodebuild", "-workspace", "make-package.json-great-again.xcworkspace")
+//            shell("ls")
+//            shell("xcodebuild", "-workspace", "make-package.json-great-again.xcworkspace")
             
         }
         else{
